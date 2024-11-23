@@ -1772,6 +1772,16 @@
     use-latest-callback "^0.2.1"
     use-sync-external-store "^1.2.2"
 
+"@react-navigation/drawer@^7.0.7":
+  version "7.0.7"
+  resolved "https://registry.yarnpkg.com/@react-navigation/drawer/-/drawer-7.0.7.tgz#d35a3ed5a863093c440329033e1f3f6e94afa86c"
+  integrity sha512-tfPZcd3TYBt9fT2+VzLPjWEpMZmgt7kZabch0zq1RNUAwm+uMaOluu+VhcTewDhfXX+1o7rU52MMXDVNUoPm2Q==
+  dependencies:
+    "@react-navigation/elements" "^2.1.1"
+    color "^4.2.3"
+    react-native-drawer-layout "^4.0.2"
+    use-latest-callback "^0.2.1"
+
 "@react-navigation/elements@^2.1.1":
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/@react-navigation/elements/-/elements-2.1.1.tgz#8e752e402ae0706c092b9c46fb3c062cd36c9971"
@@ -6030,6 +6040,13 @@ react-is@^16.13.1, react-is@^16.7.0:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
+
+react-native-drawer-layout@^4.0.2:
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/react-native-drawer-layout/-/react-native-drawer-layout-4.0.2.tgz#b12b4133c0a52b5b820d8d506156b4f6092a45f2"
+  integrity sha512-VkDpOquZQ+R2JkC9dRIO0NZrJSqRl3h/ryG+S23m3G2EenXVAXho/JuAhuM1LgO9sQuiu0hmgnOfa48ghufsfg==
+  dependencies:
+    use-latest-callback "^0.2.1"
 
 react-native-gesture-handler@~2.20.2:
   version "2.20.2"
