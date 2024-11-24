@@ -9,7 +9,6 @@ const login = () => {
     return (
         <ThemedView>
             <ThemedText>Login page</ThemedText>
-            <Button title='signup' onPress={() => router.replace("/signup")}/>
         </ThemedView>
     )
 }

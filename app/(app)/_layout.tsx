@@ -1,32 +1,55 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Tabs } from 'expo-router';
+import { Redirect, Tabs } from 'expo-router';
+import * as React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { useState } from 'react';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
+import { ThemedText } from '@/components/ThemedText';
+import { ThemedView } from '@/components/ThemedView';
+import { FontAwesome } from '@expo/vector-icons';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function AppLayout() {
-    const [user, setUser] = useState(false)
+    const [loading, setLoading] = React.useState(true)
+    const [user, setUser] = React.useState(false)
+
+    React.useEffect(() => {
+        setTimeout(() => {
+            setLoading(false)
+            setUser(true)
+        }, 1000)
+    }, [])
+
+    if (loading)
+        return <ThemedView><ThemedText type='subtitle'>Loading user data...</ThemedText></ThemedView>
+
+    if (!user)
+        return <Redirect href="/login" />
+
     return (
-        <GestureHandlerRootView>
-            <Tabs>
-                {user ?
-                    <>
-                        <Tabs.Screen name="index" options={{ headerShown: false }} />
-                    </>
-                    :
-                    <>
-                        <Tabs.Screen name="login" options={{ headerShown: false }} />
-                        <Tabs.Screen name="signup" options={{ headerShown: false }} />
-                    </>
-                }
-                <Tabs.Screen name="+not-found" />
-            </Tabs>
+        <SafeAreaView style={{ flex: 1, height: '100%' }}>
             <StatusBar style="auto" />
-        </GestureHandlerRootView>
-    );
+            <Tabs screenOptions={{ tabBarActiveTintColor: 'blue', headerShown: false }}>
+                <Tabs.Screen
+                    name="index"
+                    options={{
+                        title: 'Home',
+                        tabBarIcon: ({ color }) => <FontAwesome size={28} name="home" color={color} />,
+                    }}
+                />
+                <Tabs.Screen
+                    name="settings"
+                    options={{
+                        title: 'Settings',
+                        tabBarIcon: ({ color }) => <FontAwesome size={28} name="cog" color={color} />,
+                    }}
+                />
+            </Tabs>
+          
+        </SafeAreaView>
+    )
+
 }
+
+
+
+
+
+
