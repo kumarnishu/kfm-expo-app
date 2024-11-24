@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "routing-tutorial",
-    "slug": "routing-tutorial",
+    "name": "kfm-app",
+    "slug": "kfm-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",

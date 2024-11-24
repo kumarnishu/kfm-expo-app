@@ -1,29 +1,32 @@
-import { Drawer } from 'expo-router/drawer';
-import React from 'react';
-import { Platform } from 'react-native';
-
-import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { useFonts } from 'expo-font';
+import { Tabs } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
+import { useState } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
 
-  return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <Drawer>
-        <Drawer.Screen
-          name="index" // This is the name of the page and must match the url from root
-          options={{
-            drawerLabel: 'Home',
-            title: 'overview',
-          }}
-        />
-       
-      </Drawer>
-    </GestureHandlerRootView>
-  );
+// Prevent the splash screen from auto-hiding before asset loading is complete.
+
+export default function AppLayout() {
+    const [user, setUser] = useState(false)
+    return (
+        <GestureHandlerRootView>
+            <Tabs>
+                {user ?
+                    <>
+                        <Tabs.Screen name="index" options={{ headerShown: false }} />
+                    </>
+                    :
+                    <>
+                        <Tabs.Screen name="login" options={{ headerShown: false }} />
+                        <Tabs.Screen name="signup" options={{ headerShown: false }} />
+                    </>
+                }
+                <Tabs.Screen name="+not-found" />
+            </Tabs>
+            <StatusBar style="auto" />
+        </GestureHandlerRootView>
+    );
 }

@@ -2,12 +2,12 @@ import React from 'react'
 import { ThemedView } from '@/components/ThemedView'
 import { ThemedText } from '@/components/ThemedText'
 
-const home = () => {
+const profile = () => {
     return (
         <ThemedView>
-            <ThemedText>home page</ThemedText>
+            <ThemedText>profile page</ThemedText>
         </ThemedView>
     )
 }
 
-export default home
+export default profile
