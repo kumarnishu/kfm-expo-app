@@ -5,18 +5,12 @@ import { ThemedText } from '@/components/elements/ThemedText';
 import { ThemedView } from '@/components/elements/ThemedView';
 import { FontAwesome } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { UserContext } from '@/contexts/UserContext';
+import { LoadingContext } from '@/contexts/LoadingContext';
 
 export default function AppLayout() {
-    const [loading, setLoading] = React.useState(true);
-    const [user, setUser] = React.useState(false);
-    const [isCustomer, setIsCustomer] = React.useState(true);
-
-    React.useEffect(() => {
-        setTimeout(() => {
-            setLoading(false);
-            setUser(true);
-        }, 1000);
-    }, []);
+    const { user } = React.useContext(UserContext)
+    const { loading } = React.useContext(LoadingContext)
 
     if (loading)
         return (
@@ -52,7 +46,7 @@ export default function AppLayout() {
             name="settings"
             options={{
                 title: 'Settings',
-                href: isCustomer ? null : '/(app)/settings',
+                href: user.is_engineer || user.is_admin ? null : '/(app)/settings',
                 tabBarIcon: ({ color }) => <FontAwesome size={28} name="cog" color={color} />,
             }}
         />

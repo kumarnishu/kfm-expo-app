@@ -1,0 +1,20 @@
+export type GetUserDto = {
+    _id: string,
+    username: string,
+    email: string,
+    mobile: string,
+    customer: string,
+    dp: string,
+    orginal_password: string,
+    is_admin: boolean,
+    email_verified: boolean,
+    mobile_verified: boolean,
+    is_active: boolean,
+    last_login: string,
+    is_multi_login: boolean,
+    is_engineer: boolean,
+    created_at: string,
+    updated_at: string,
+    created_by: string,
+    updated_by: string
+}
