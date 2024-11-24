@@ -4,7 +4,7 @@ import { ThemedText } from '@/components/elements/ThemedText'
 
 const MainHeader = () => {
   return (
-      <ThemedView ><ThemedText>App Header</ThemedText></ThemedView>
+      <ThemedView ><ThemedText type='title'>Machines</ThemedText></ThemedView>
   )
 }
 
