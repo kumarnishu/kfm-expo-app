@@ -1,6 +1,6 @@
 import React from 'react'
-import { ThemedView } from '@/components/ThemedView'
-import { ThemedText } from '@/components/ThemedText'
+import { ThemedView } from '@/components/elements/ThemedView'
+import { ThemedText } from '@/components/elements/ThemedText'
 
 const settings = () => {
     return (

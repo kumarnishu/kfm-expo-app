@@ -2,11 +2,10 @@ import React from 'react'
 import { ThemedView } from '@/components/elements/ThemedView'
 import { ThemedText } from '@/components/elements/ThemedText'
 
-const home = () => {
-    return (
-        <ThemedView>
-        </ThemedView>
-    )
+const MainHeader = () => {
+  return (
+      <ThemedView ><ThemedText>App Header</ThemedText></ThemedView>
+  )
 }
 
-export default home
+export default MainHeader

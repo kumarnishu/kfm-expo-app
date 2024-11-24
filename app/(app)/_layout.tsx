@@ -1,10 +1,11 @@
 import { Redirect, Tabs } from 'expo-router';
 import * as React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+import { ThemedText } from '@/components/elements/ThemedText';
+import { ThemedView } from '@/components/elements/ThemedView';
 import { FontAwesome } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import MainHeader from '@/components/headers/MainHeader';
 
 export default function AppLayout() {
     const [loading, setLoading] = React.useState(true)
@@ -26,12 +27,13 @@ export default function AppLayout() {
     return (
         <SafeAreaView style={{ flex: 1, height: '100%' }}>
             <StatusBar style="auto" />
-            <Tabs screenOptions={{ tabBarActiveTintColor: 'blue', headerShown: false }}>
+            <Tabs screenOptions={{ headerShown: true }}>
                 <Tabs.Screen
                     name="index"
                     options={{
                         title: 'Home',
                         tabBarIcon: ({ color }) => <FontAwesome size={28} name="home" color={color} />,
+                        header: () => <MainHeader />,
                     }}
                 />
                 <Tabs.Screen
@@ -42,7 +44,7 @@ export default function AppLayout() {
                     }}
                 />
             </Tabs>
-          
+
         </SafeAreaView>
     )
 
