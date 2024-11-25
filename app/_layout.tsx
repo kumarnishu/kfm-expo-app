@@ -47,8 +47,8 @@ export default function RootLayout() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <LoadingProvider>
-        <UserProvider>
+      <UserProvider>
+        <LoadingProvider>
           <SafeAreaProvider>
             <AlertProvider>
               <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
@@ -56,8 +56,8 @@ export default function RootLayout() {
               </ThemeProvider>
             </AlertProvider>
           </SafeAreaProvider>
-        </UserProvider>
-      </LoadingProvider>
+        </LoadingProvider>
+      </UserProvider>
     </QueryClientProvider>
   );
 }

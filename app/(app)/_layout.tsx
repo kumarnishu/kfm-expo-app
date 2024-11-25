@@ -11,9 +11,7 @@ import { LoadingContext } from '@/contexts/LoadingContext';
 export default function AppLayout() {
     const { user } = React.useContext(UserContext)
     const { loading } = React.useContext(LoadingContext)
-
-
-
+    
     if (loading)
         return (
             <ThemedView>
@@ -22,7 +20,7 @@ export default function AppLayout() {
         );
 
 
-    if (user) {
+    if (user){
         const screens = [
             <Tabs.Screen
                 key="machines"

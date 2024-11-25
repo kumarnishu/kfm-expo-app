@@ -11,9 +11,9 @@ function useRemoteLoading() {
     const { data, isSuccess, isLoading, isError } = useQuery<AxiosResponse<GetUserDto>, BackendError>("profile", GetProfile)
 
     useEffect(() => {
-        if (data)
+        if (isSuccess && data)
             setUser(data.data)
-    }, [isSuccess])
+    }, [isSuccess, data])
 
     return { remoteUser: user, remoteLoading: isLoading, isError: isError }
 }
@@ -33,7 +33,7 @@ export const LoadingContext = createContext<Context>({
 export function LoadingProvider(props: { children: JSX.Element }) {
     const { remoteUser, remoteLoading, isError } = useRemoteLoading()
     const [loading, setLoading] = useState(remoteLoading);
-    const { setUser } = useContext(UserContext)
+    const { user,setUser } = useContext(UserContext)
 
     useEffect(() => {
         if (remoteUser) {
@@ -45,6 +45,7 @@ export function LoadingProvider(props: { children: JSX.Element }) {
             setUser(undefined)
         }
     }, [remoteUser, isError])
+    
     return (
         <LoadingContext.Provider value={{ loading, setLoading }}>
             {props.children}

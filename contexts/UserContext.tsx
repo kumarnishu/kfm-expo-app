@@ -17,7 +17,7 @@ export const UserContext = createContext<Context>({
 export function UserProvider(props: { children: JSX.Element }) {
     const [user, setUser] = useState<GetUserDto>();
 
-    console.log(user)
+   
     return (
         <UserContext.Provider value={{ user, setUser }
         }>
