@@ -17,6 +17,7 @@ import { BackendError } from '..';
 import { router } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { GetUserDto } from '@/dto';
+import { ThemedButton } from '@/components/elements/ThemedButton';
 
 const login = () => {
     const { setUser } = useContext(UserContext);
@@ -61,7 +62,7 @@ const login = () => {
 
     return (
         <ScrollView>
-            <View style={styles.form}>
+            <ThemedView style={styles.form}>
                 <TextInput
                     placeholder="Username, Email, or Mobile"
                     value={username || ''}
@@ -77,12 +78,12 @@ const login = () => {
                     autoCapitalize="none"
                 />
 
-                <Button
-                    title="login"
+                <ThemedButton
+                    label='Login'
                     onPress={handleSubmit}
                     disabled={isLoading}
                 />
-            </View>
+            </ThemedView>
         </ScrollView>
     );
 };

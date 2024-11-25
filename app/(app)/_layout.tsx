@@ -12,6 +12,8 @@ export default function AppLayout() {
     const { user } = React.useContext(UserContext)
     const { loading } = React.useContext(LoadingContext)
 
+
+
     if (loading)
         return (
             <ThemedView>
@@ -19,44 +21,45 @@ export default function AppLayout() {
             </ThemedView>
         );
 
-    if (!user) return <Redirect href="/login" />;
 
-    const screens = [
-        <Tabs.Screen
-            key="machines"
-            name="index"
-            options={{
-                title: 'Machines',
-                tabBarIcon: ({ color }) => <FontAwesome size={28} name="amazon" color={color} />,
-            }}
-        />,
+    if (user) {
+        const screens = [
+            <Tabs.Screen
+                key="machines"
+                name="index"
+                options={{
+                    title: 'Machines',
+                    tabBarIcon: ({ color }) => <FontAwesome size={28} name="amazon" color={color} />,
+                }}
+            />,
 
-        <Tabs.Screen
-            key="spares"
-            name="spares"
-            options={{
-                title: 'Spares',
-                tabBarIcon: ({ color }) => <FontAwesome size={28} name="ambulance" color={color} />,
-            }}
-        />
-        ,
+            <Tabs.Screen
+                key="spares"
+                name="spares"
+                options={{
+                    title: 'Spares',
+                    tabBarIcon: ({ color }) => <FontAwesome size={28} name="ambulance" color={color} />,
+                }}
+            />
+            ,
 
-        <Tabs.Screen
-            key="settings"
-            name="settings"
-            options={{
-                title: 'Settings',
-                href: user.is_engineer || user.is_admin ? null : '/(app)/settings',
-                tabBarIcon: ({ color }) => <FontAwesome size={28} name="cog" color={color} />,
-            }}
-        />
+            <Tabs.Screen
+                key="settings"
+                name="settings"
+                options={{
+                    title: 'Settings',
+                    href: user.is_engineer || user.is_admin ? '/(app)/settings' : null,
+                    tabBarIcon: ({ color }) => <FontAwesome size={28} name="cog" color={color} />,
+                }}
+            />
 
-    ].filter(Boolean); // Filter out `false` or `null` entries
-
-    return (
-        <SafeAreaView style={{ flex: 1, height: '100%' }}>
-            <StatusBar style="auto" />
-            <Tabs screenOptions={{ headerShown: false, animation: 'fade' }}>{screens}</Tabs>
-        </SafeAreaView>
-    );
+        ].filter(Boolean);
+        return (
+            <SafeAreaView style={{ flex: 1, height: '100%' }}>
+                <StatusBar style="auto" />
+                <Tabs screenOptions={{ headerShown: false, animation: 'fade' }}>{screens}</Tabs>
+            </SafeAreaView>
+        );
+    }
+    return <Redirect href="/login" />;
 }

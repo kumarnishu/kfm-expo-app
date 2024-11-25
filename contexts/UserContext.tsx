@@ -16,10 +16,12 @@ export const UserContext = createContext<Context>({
 // user provider
 export function UserProvider(props: { children: JSX.Element }) {
     const [user, setUser] = useState<GetUserDto>();
+
+    console.log(user)
     return (
-        <UserContext.Provider value= {{ user, setUser }
-}>
-    { props.children }
-    </UserContext.Provider>
+        <UserContext.Provider value={{ user, setUser }
+        }>
+            {props.children}
+        </UserContext.Provider>
     );
 }
