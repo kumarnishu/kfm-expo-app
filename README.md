@@ -2,5 +2,5 @@
 
 
 ## install Build apk
-`eas build -p android --profile preview`
+`eas build -p android --profile production`
 
