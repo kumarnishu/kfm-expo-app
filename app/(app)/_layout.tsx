@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { Redirect, Tabs } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { UserContext } from '@/contexts/UserContext';
-import { ActivityIndicator,  Snackbar } from 'react-native-paper';
+import { ActivityIndicator, Icon, Snackbar } from 'react-native-paper';
 import { AlertContext } from '@/contexts/alertContext';
 import Navbar from '@/components/Navbar';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -41,23 +41,53 @@ export default function TabLayout() {
         </SafeAreaView>
         <Tabs
           screenOptions={{
-            headerShown: false
+            headerShown: false,
+            tabBarActiveTintColor: '#6200ea', // Active icon color (purple)
+            tabBarInactiveTintColor: '#828282', // Inactive icon color (gray)
+            tabBarActiveBackgroundColor: 'whitesmoke'
           }}>
           <Tabs.Screen
             name="index"
             options={{
               title: 'Home',
-
+              tabBarIcon: () => <Icon
+                source="home"
+                size={25}
+              />
             }}
           />
           <Tabs.Screen
-            name="machines"
+            name="services"
             options={{
-              title: 'Machines',
-
+              title: 'Services',
+              tabBarIcon: () => <Icon
+                source="file-tree-outline"
+                size={25}
+              />
             }}
           />
-        </Tabs>
+          <Tabs.Screen
+            name="notifications"
+            options={{
+              title: 'Notifications',
+              href: null,
+              tabBarIcon: () => <Icon
+                source="bell"
+                size={25}
+              />
+            }}
+          />
+          <Tabs.Screen
+            name="requests"
+            options={{
+              title: 'My Requests',
+              tabBarIcon: () => <Icon
+                source="forum"
+                size={25}
+              />
+            }}
+          />
+        </Tabs >
       </>
     );
 

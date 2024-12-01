@@ -1,7 +1,7 @@
 import { View, Platform, Image, StyleSheet } from 'react-native'
 import React, { useContext, useState } from 'react'
 import { toTitleCase } from '@/utils/toTitleCase'
-import { Appbar, Button, Divider, Text } from 'react-native-paper'
+import { Appbar, Button, Divider, Icon, IconButton, MD3Colors, Text } from 'react-native-paper'
 import { Menu } from 'react-native-paper';
 import { Logout } from '@/services/UserServices';
 import { BackendError } from '@/index';
@@ -15,33 +15,39 @@ const MORE_ICON = Platform.OS === 'ios' ? 'dots-horizontal' : 'dots-vertical';
 const Navbar = () => {
     const { user, setUser } = useContext(UserContext)
     const [error, setError] = useState<BackendError>()
-    const [showMenu, setShowMenu] = React.useState(false);
+
     const [showDrawer, setShowDrawer] = React.useState(false);
 
     return (
         <>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', height: 65, borderBottomWidth: 1, backgroundColor: 'red' }}>
+            <View style={style.navContainer}>
                 <Button onPress={() => { setShowDrawer(!showDrawer) }}>
                     {user?.dp && user?.dp ? <Image source={{ uri: user?.dp }} style={style.picture} /> : <Text style={style.text}>{toTitleCase(user?.username.slice(0, 8) || "")}</Text>}
                 </Button>
-                <Menu
-                    anchorPosition='bottom'
-                    visible={showMenu}
-                    onDismiss={() => setShowMenu(!showMenu)}
-                    anchor={<Appbar.Action icon={MORE_ICON} color='white' onPress={() => { setShowMenu(!showMenu) }} />}>
 
-                    <Menu.Item onPress={() => { }} title="Profile" />
-                    <Menu.Item onPress={() => { }} title="Settings" />
-                    <Divider />
-                    <Menu.Item onPress={() => { }} title="" />
-                    <Menu.Item onPress={async () => {
-                        await Logout().then(() => {
-                            setUser(undefined)
-                            router.replace("/login")
-                        }).catch((err) => setError(err))
-                    }}
-                        title="Logout" />
-                </Menu>
+                <View style={style.iconView}>
+                    <View>
+                        <IconButton
+                            icon="bell"
+                            size={35}
+                            iconColor='white'
+                            onPress={() => console.log('Notification pressed')}
+                        />
+                        {1 > 0 && (
+                            <View style={style.badge}>
+                                <Text style={style.badgeText}>{1}</Text>
+                            </View>
+                        )}
+                    </View>
+
+                    <IconButton
+                        icon="menu"
+                        size={35}
+                        iconColor='white'
+                        onPress={() => console.log('Pressed')}
+                    />
+
+                </View>
             </View>
             <SideDrawer visible={showDrawer} handleClose={() => setShowDrawer(!showDrawer)} position='left' />
 
@@ -51,8 +57,11 @@ const Navbar = () => {
 
 const style = StyleSheet.create({
 
-    spaceBetween: {
-        flex: 1, flexDirection: 'row', gap: 1, justifyContent: 'space-between', alignItems: 'center'
+    navContainer: {
+        flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', height: 65, borderBottomWidth: 1, backgroundColor: 'red'
+    },
+    iconView: {
+        flexDirection: 'row', justifyContent: 'space-between',
     },
     picture: {
         marginLeft: 10,
@@ -67,7 +76,24 @@ const style = StyleSheet.create({
         fontSize: 30,
         paddingLeft: 10,
         fontWeight: 'bold'
-    }
+    },
+    badge: {
+        position: 'absolute',
+        top: 10,
+        right: 13,
+        backgroundColor: 'yellow',
+        borderRadius: 10,
+        minWidth: 15,
+        minHeight: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 1,
+    },
+    badgeText: {
+        color: 'black',
+        fontSize: 10,
+        fontWeight: 'bold',
+    },
 })
 
 export default Navbar

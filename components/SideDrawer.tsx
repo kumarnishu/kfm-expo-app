@@ -1,7 +1,10 @@
+import { UserContext } from '@/contexts/UserContext';
+import { Logout } from '@/services/UserServices';
 import { router } from 'expo-router';
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import { Modal, ScrollView, StyleSheet } from 'react-native';
-import { Drawer } from 'react-native-paper';
+import { Button, Divider, Drawer, Icon, MD3Colors } from 'react-native-paper';
+import { BackendError } from '..';
 
 
 type Props = {
@@ -13,6 +16,8 @@ type Props = {
 
 const SideDrawer = ({ visible, handleClose, position }: Props) => {
     const [active, setActive] = React.useState('');
+    const { user, setUser } = useContext(UserContext)
+    const [error, setError] = useState<BackendError>()
     return (
         <Modal
             animationType="fade"
@@ -31,15 +36,46 @@ const SideDrawer = ({ visible, handleClose, position }: Props) => {
                     }}
                 />
                 <Drawer.Item
-                    label="Profile"
-                    icon="account"
-                    active={active === 'account'}
+                    label="Explore"
+                    icon="store"
+                    active={active === 'explore'}
                     onPress={() => {
-                        setActive('account')
+                        setActive('explore')
                         handleClose()
-                        router.push("/machines")
+                        router.push("/main/explore")
                     }}
                 />
+                <Drawer.Item
+                    label="Products"
+                    icon="microwave"
+                    active={active === 'products'}
+                    onPress={() => {
+                        setActive('products')
+                        handleClose()
+                        router.push("/main/products")
+                    }}
+                />
+
+                <Divider />
+
+                <Drawer.Item
+                    label="Logout"
+                    icon={() => <Icon
+                        source="logout"
+                        size={25}
+                    />}
+                    active={active === 'logout'}
+                    onPress={async () => {
+                        await Logout().then(() => {
+                            setUser(undefined)
+                            handleClose()
+                            router.replace("/login")
+                        }).catch((err) => setError(err))
+                    }}
+                />
+
+
+
             </ScrollView>
         </Modal >
 
@@ -48,6 +84,7 @@ const SideDrawer = ({ visible, handleClose, position }: Props) => {
 
 const styles = StyleSheet.create({
     rightDrawer: {
+        paddingTop:60,
         marginLeft: 100,
         backgroundColor: 'white',
         shadowColor: '#000',
@@ -58,8 +95,10 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 10,
+        height: '100%',
     },
     leftDrawer: {
+        paddingTop: 60,
         marginRight: 100,
         backgroundColor: 'white',
         flex: 1,

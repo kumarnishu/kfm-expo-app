@@ -1,12 +1,12 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 
-const machines = () => {
+const requests = () => {
   return (
     <View>
-      <Text>machines</Text>
+      <Text>requests</Text>
     </View>
   )
 }
 
-export default machines
+export default requests
