@@ -15,13 +15,16 @@ const MORE_ICON = Platform.OS === 'ios' ? 'dots-horizontal' : 'dots-vertical';
 const Navbar = () => {
     const { user, setUser } = useContext(UserContext)
     const [error, setError] = useState<BackendError>()
-
+    const [pos, setPos] = useState<string>('left')
     const [showDrawer, setShowDrawer] = React.useState(false);
 
     return (
         <>
             <View style={style.navContainer}>
-                <Button onPress={() => { setShowDrawer(!showDrawer) }}>
+                <Button onPress={() => {
+                    setShowDrawer(!showDrawer)
+                    setPos('left')
+                }}>
                     {user?.dp && user?.dp ? <Image source={{ uri: user?.dp }} style={style.picture} /> : <Text style={style.text}>{toTitleCase(user?.username.slice(0, 8) || "")}</Text>}
                 </Button>
 
@@ -44,7 +47,11 @@ const Navbar = () => {
                         icon="menu"
                         size={35}
                         iconColor='white'
-                        onPress={() => setShowDrawer(!showDrawer)}
+                        onPress={() => {
+                            setShowDrawer(!showDrawer)
+                            setPos('right')
+                        }
+                        }
                     />
 
                 </View>
