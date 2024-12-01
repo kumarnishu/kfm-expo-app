@@ -15,7 +15,7 @@ const MORE_ICON = Platform.OS === 'ios' ? 'dots-horizontal' : 'dots-vertical';
 const Navbar = () => {
     const { user, setUser } = useContext(UserContext)
     const [error, setError] = useState<BackendError>()
-    const [pos, setPos] = useState<string>('left')
+    const [pos, setPos] = useState<'left' | 'right'>('left')
     const [showDrawer, setShowDrawer] = React.useState(false);
 
     return (
