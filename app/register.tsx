@@ -83,7 +83,7 @@ function register() {
         type: result.assets[0].mimeType || 'image/*',
         name: result.assets[0].fileName + String(Number(new Date())),
       });
-
+      setMessage('file selected')
     }
     else {
       setSelectedImage(null);
@@ -203,8 +203,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   selectedImage: {
-    width: 150,
-    height: 150,
+    width: 60,
+    height: 60,
     borderRadius: 75,
     marginBottom: 16,
   },
