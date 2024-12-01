@@ -37,11 +37,7 @@ const index = () => {
               router.replace("/login")
             }).catch((err) => setError(err))
           }}
-            title={
-              <Button mode='contained'           >
-                Logout
-              </Button>} />
-
+            title="Logout" />
         </Menu>
       </View>
 
