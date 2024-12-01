@@ -44,7 +44,7 @@ const Navbar = () => {
                         icon="menu"
                         size={35}
                         iconColor='white'
-                        onPress={() => console.log('Pressed')}
+                        onPress={() => setShowDrawer(!showDrawer)}
                     />
 
                 </View>
