@@ -56,7 +56,7 @@ const Navbar = () => {
 
                 </View>
             </View>
-            <SideDrawer visible={showDrawer} handleClose={() => setShowDrawer(!showDrawer)} position='left' />
+            <SideDrawer visible={showDrawer} handleClose={() => setShowDrawer(!showDrawer)} position={pos} />
 
         </>
     )
