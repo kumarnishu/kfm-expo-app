@@ -21,7 +21,8 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.kfmindia.kfmapp"
+      "package": "com.kfmindia.kfmapp",
+      "googleServicesFile": "./firebase.json"
     },
     "web": {
       "bundler": "metro",
