@@ -1,0 +1,18 @@
+{
+    "cli": {
+        "version": ">= 5.9.3"
+    },
+    "build": {
+        "production": {
+            "android": {
+                "buildType": "apk"
+            },
+            "ios": {
+                "simulator": true
+            },
+            "env": {
+                "EXPO_PUBLIC_SERVER_URL": "http://kfmindia.app"
+            }
+        }
+    }
+}
