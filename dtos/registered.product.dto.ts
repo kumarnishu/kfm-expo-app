@@ -22,6 +22,7 @@ export type GetRegisteredProductDto = {
     _id: string,
     sl_no: string,
     machine: string,
+    machine_photo:string,
     customer: string,
     is_active: boolean,
     warrantyUpto: string,

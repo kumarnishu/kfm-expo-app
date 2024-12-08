@@ -12,11 +12,18 @@ const cardData: { id: number, title: string, description: string, image: any, li
     link: '/(app)/customers',
   },
   {
-    id: 2,
-    title: 'Products',
-    description: 'Registered products',
-    image: require('../../assets/img/products.jpeg'),
-    link: '/(app)/products',
+    id: 5,
+    title: 'Engineers',
+    description: 'Our Hard working engineers',
+    image: require('../../assets/img/engineer.jpg'),
+    link: '/(app)/engineer',
+  },
+  {
+    id: 7,
+    title: 'Machines',
+    description: 'Machines that Made us',
+    image: require('../../assets/img/machines.jpg'),
+    link: '/(app)/machines',
   },
   {
     id: 3,
@@ -26,19 +33,21 @@ const cardData: { id: number, title: string, description: string, image: any, li
     link: '/(app)/spares',
   },
   {
+    id: 2,
+    title: 'Products',
+    description: 'Registered products',
+    image: require('../../assets/img/products.jpeg'),
+    link: '/(app)/products',
+  },
+  
+  {
     id: 4,
     title: 'Service Requests',
     description: 'Requests sent to us',
     image: require('../../assets/img/requests.jpeg'),
     link: '/(app)/requests',
   },
-  {
-    id: 5,
-    title: 'Engineers',
-    description: 'Our Hard working engineers',
-    image: require('../../assets/img/engineer.jpg'),
-    link: '/(app)/engineer',
-  },
+ 
   {
     id: 6,
     title: 'Notifications',
@@ -46,13 +55,7 @@ const cardData: { id: number, title: string, description: string, image: any, li
     image: require('../../assets/img/notifications.png'),
     link: '/(app)/notifications',
   },
-  {
-    id: 7,
-    title: 'Machines',
-    description: 'Machines that Made us',
-    image: require('../../assets/img/machines.jpg'),
-    link: '/(app)/machines',
-  },
+ 
 ];
 
 const CardList = () => {
@@ -110,6 +113,7 @@ const styles = StyleSheet.create({
   paragraph: {
     paddingLeft: 2,
     textTransform: 'capitalize',
+    color:'black'
   },
 });
 

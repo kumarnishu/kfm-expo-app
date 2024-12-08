@@ -4,19 +4,22 @@ import { useQuery } from 'react-query';
 import { AxiosResponse } from 'axios';
 import { BackendError } from '@/index';
 import { Avatar, Button, Card, TextInput } from 'react-native-paper';
+import { useLocalSearchParams } from 'expo-router';
 import { UserContext } from '@/contexts/UserContext';
 import FuzzySearch from 'fuzzy-search';
-import { GetAllEngineers } from '@/services/UserServices';
+import { GetAllUsers } from '@/services/UserServices';
 import { GetUserDto } from '@/dtos/user.dto';
 
 
-const Engineers = () => {
-    const [engineers, setEngineers] = useState<GetUserDto[]>([])
-    const [prefilteredEngineers, setPrefilteredEngineers] = useState<GetUserDto[]>([])
+const Customers = () => {
+    const [hidden, setHidden] = useState(false);
+    const [customers, setCustomers] = useState<GetUserDto[]>([])
+    const [prefilteredCustomers, setPrefilteredCustomers] = useState<GetUserDto[]>([])
     const [refreshing, setRefreshing] = useState(false); // State for pull-to-refresh
     const { user } = useContext(UserContext);
     const [filter, setFilter] = useState<string | undefined>()
-    const { data, isSuccess, isLoading, refetch, isError } = useQuery<AxiosResponse<GetUserDto[]>, BackendError>(["engineers"], async () => GetAllEngineers())
+    const { id } = useLocalSearchParams();
+    const { data, isSuccess, isLoading, refetch, isError } = useQuery<AxiosResponse<GetUserDto[]>, BackendError>(["users", id], async () => GetAllUsers({ hidden: false, customer: String(id) }))
 
     // Pull-to-refresh handler
     const onRefresh = async () => {
@@ -27,29 +30,29 @@ const Engineers = () => {
 
     useEffect(() => {
         if (filter) {
-            const searcher = new FuzzySearch(engineers, ['username', 'email', 'mobile'], {
+            const searcher = new FuzzySearch(customers, ['username', 'email', 'mobile'], {
                 caseSensitive: true,
             });
             const result = searcher.search(filter);
-            setEngineers(result)
+            setCustomers(result)
         }
         if (!filter)
-            setEngineers(prefilteredEngineers)
+            setCustomers(prefilteredCustomers)
     }, [filter])
 
     useEffect(() => {
         if (isSuccess) {
-            setEngineers(data.data)
-            setPrefilteredEngineers(data.data)
+            setCustomers(data.data)
+            setPrefilteredCustomers(data.data)
         }
     }, [isSuccess, data])
-    // Render each engineer as a card
-    const renderEngineer = ({ item }: { item: GetUserDto }) => (
+    // Render each customer as a card
+    const renderCustomer = ({ item }: { item: GetUserDto }) => (
 
         <Card style={styles.card}>
             <Card.Title
                 style={{ width: '100%' }}
-                title={item.is_admin ? `${item.username.toUpperCase()}-(Admin)` : item.is_engineer ? `${item.username.toUpperCase()}-(Engineer)` : `${item.username.toUpperCase()}-(Engineer)` || "Member" + item.username.toUpperCase()}
+                title={item.is_admin ? `${item.username.toUpperCase()}-(Admin)` : item.is_engineer ? `${item.username.toUpperCase()}-(Engineer)` : `${item.username.toUpperCase()}-(Customer)` || "Member" + item.username.toUpperCase()}
                 subtitle={`Mob : ${item.mobile || "N/A"}`}
                 subtitleStyle={{ color: 'black', flexWrap: 'wrap' }}
                 left={(props) => (
@@ -71,7 +74,7 @@ const Engineers = () => {
         return (
             <View style={styles.loader}>
                 <ActivityIndicator size="large" color="#6200ea" />
-                <Text>Loading Engineers...</Text>
+                <Text>Loading Customers...</Text>
             </View>
         );
     }
@@ -79,7 +82,7 @@ const Engineers = () => {
     if (isError) {
         return (
             <View style={styles.loader}>
-                <Text>Failed to load engineers. Please try again later.</Text>
+                <Text>Failed to load customers. Please try again later.</Text>
                 <Button mode="contained" onPress={() => refetch()}>
                     Retry
                 </Button>
@@ -91,28 +94,37 @@ const Engineers = () => {
         <View style={styles.container}>
             {/* Title */}
 
-            <Text style={styles.title}>Engineers</Text>
-            <TextInput style={{ marginBottom: 10 }} placeholder='Engineers' mode='outlined' onChangeText={(val) => setFilter(val)} />
+            <Text style={styles.title}>Members</Text>
+            <TextInput style={{ marginBottom: 10 }} placeholder='Members' mode='outlined' onChangeText={(val) => setFilter(val)} />
 
 
-            {/* Engineer List */} 
+            {/* Customer List */}
             <FlatList
-                data={engineers}
+                data={customers}
                 keyExtractor={(item) => item._id.toString()}
-                renderItem={renderEngineer}
+                renderItem={renderCustomer}
                 refreshing={refreshing} // Indicates if the list is refreshing
                 onRefresh={onRefresh} // Handler for pull-to-refresh
                 ListEmptyComponent={
-                    <Text style={styles.emptyText}>No engineers found.</Text>
+                    <Text style={styles.emptyText}>No customers found.</Text>
                 }
             />
 
-          
+            {/* Toggle Active/Inactive Customers */}
+            {user && user.is_admin && (
+                <Button
+                    mode="contained"
+                    onPress={() => setHidden(!hidden)}
+                    style={styles.toggleButton}
+                >
+                    {hidden ? "Show Active Customers" : "Show Inactive Customers"}
+                </Button>
+            )}
         </View>
     );
 };
 
-export default Engineers;
+export default Customers;
 
 const styles = StyleSheet.create({
     container: {
