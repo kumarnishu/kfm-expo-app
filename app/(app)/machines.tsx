@@ -1,12 +1,12 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 
-const services = () => {
+const machines = () => {
   return (
     <View>
-      <Text>services</Text>
+      <Text>machines</Text>
     </View>
   )
 }
 
-export default services
+export default machines

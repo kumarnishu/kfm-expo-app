@@ -1,97 +1,84 @@
 import { UserContext } from '@/contexts/UserContext';
 import { Logout } from '@/services/UserServices';
-import { router } from 'expo-router';
-import React, { useContext, useState } from 'react';
+import { Href, router } from 'expo-router';
+import React, { useContext, useCallback } from 'react';
 import { Modal, ScrollView, StyleSheet } from 'react-native';
-import { Button, Divider, Drawer, Icon, MD3Colors } from 'react-native-paper';
-import { BackendError } from '..';
-
+import { Drawer, Icon } from 'react-native-paper';
 
 type Props = {
-    visible: boolean,
-    handleClose: () => void,
-    position: "right" | "left",
-}
-
+    visible: boolean;
+    handleClose: () => void;
+    position: 'right' | 'left';
+};
 
 const SideDrawer = ({ visible, handleClose, position }: Props) => {
     const [active, setActive] = React.useState('');
-    const { user, setUser } = useContext(UserContext)
-    const [error, setError] = useState<BackendError>()
+    const {  setUser } = useContext(UserContext);
+
+    // Use useCallback to memoize event handlers
+    const navigateTo = useCallback(
+        (route: Href, label: string) => {
+            setActive(label);
+            handleClose();
+            router.push(route);
+        },
+        [handleClose]
+    );
+
+    const handleLogout = useCallback(async () => {
+        try {
+            await Logout();
+            setUser(undefined);
+            handleClose();
+            router.replace('/login');
+        } catch (err:any) {
+            console.log(err);
+        }
+    }, [handleClose, setUser]);
+
     return (
         <Modal
             animationType="fade"
-            transparent={visible ? visible : false}
+            transparent={visible}
             visible={visible}
-            onRequestClose={handleClose}>
-            <ScrollView contentContainerStyle={position === "right" ? styles.rightDrawer : styles.leftDrawer}>
+            onRequestClose={handleClose}
+        >
+            <ScrollView
+                contentContainerStyle={
+                    position === 'right' ? styles.rightDrawer : styles.leftDrawer
+                }
+            >
                 <Drawer.Item
                     label="Home"
                     icon="home"
                     active={active === 'home'}
-                    onPress={() => {
-                        setActive('home')
-                        handleClose()
-                        router.push("/")
-                    }}
+                    onPress={() => navigateTo('/', 'home')}
                 />
                 <Drawer.Item
                     label="Explore"
-                    icon="store"
+                    icon="search"
                     active={active === 'explore'}
-                    onPress={() => {
-                        setActive('explore')
-                        handleClose()
-                        router.push("/main/explore")
-                    }}
+                    onPress={() => navigateTo('/main/explore', 'explore')}
                 />
-                <Drawer.Item
-                    label="Products"
-                    icon="microwave"
-                    active={active === 'products'}
-                    onPress={() => {
-                        setActive('products')
-                        handleClose()
-                        router.push("/main/products")
-                    }}
-                />
-
-                <Divider />
-
+               
                 <Drawer.Item
                     label="Logout"
-                    icon={() => <Icon
-                        source="logout"
-                        size={25}
-                    />}
+                    icon={() => <Icon source="logout" size={25} />}
                     active={active === 'logout'}
-                    onPress={async () => {
-                        await Logout().then(() => {
-                            setUser(undefined)
-                            handleClose()
-                            router.replace("/login")
-                        }).catch((err) => setError(err))
-                    }}
+                    onPress={handleLogout}
                 />
-
-
-
             </ScrollView>
-        </Modal >
-
+        </Modal>
     );
 };
 
 const styles = StyleSheet.create({
     rightDrawer: {
-        paddingTop:60,
+        paddingTop: 60,
         marginLeft: 100,
         backgroundColor: 'white',
         shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
+        shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 10,
@@ -104,14 +91,11 @@ const styles = StyleSheet.create({
         flex: 1,
         height: '100%',
         shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
+        shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 10,
-    }
+    },
 });
 
 export default SideDrawer;

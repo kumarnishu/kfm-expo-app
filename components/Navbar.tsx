@@ -1,20 +1,14 @@
-import { View, Platform, Image, StyleSheet } from 'react-native'
+import { View, Image, StyleSheet } from 'react-native'
 import React, { useContext, useState } from 'react'
 import { toTitleCase } from '@/utils/toTitleCase'
-import { Appbar, Button, Divider, Icon, IconButton, MD3Colors, Text } from 'react-native-paper'
-import { Menu } from 'react-native-paper';
-import { Logout } from '@/services/UserServices';
-import { BackendError } from '@/index';
+import { Button, IconButton, Text } from 'react-native-paper'
 import { UserContext } from '@/contexts/UserContext';
-import { router } from 'expo-router';
 import SideDrawer from './SideDrawer';
-
-const MORE_ICON = Platform.OS === 'ios' ? 'dots-horizontal' : 'dots-vertical';
+import { router } from 'expo-router';
 
 
 const Navbar = () => {
-    const { user, setUser } = useContext(UserContext)
-    const [error, setError] = useState<BackendError>()
+    const { user } = useContext(UserContext)
     const [pos, setPos] = useState<'left' | 'right'>('left')
     const [showDrawer, setShowDrawer] = React.useState(false);
 
@@ -25,7 +19,7 @@ const Navbar = () => {
                     setShowDrawer(!showDrawer)
                     setPos('left')
                 }}>
-                    {user?.dp && user?.dp ? <Image source={{ uri: user?.dp }} style={style.picture} /> : <Text style={style.text}>{toTitleCase(user?.username.slice(0, 8) || "")}</Text>}
+                    {user?.dp && user?.dp ? <Image source={{ uri: user?.dp }} style={style.picture} /> : <Text style={style.logotext}>{toTitleCase(user?.username.slice(0, 8) || "")}</Text>}
                 </Button>
 
                 <View style={style.iconView}>
@@ -34,7 +28,7 @@ const Navbar = () => {
                             icon="bell"
                             size={35}
                             iconColor='white'
-                            onPress={() => console.log('Notification pressed')}
+                            onPress={() => router.push("/notifications")}
                         />
                         {1 > 0 && (
                             <View style={style.badge}>
@@ -78,9 +72,9 @@ const style = StyleSheet.create({
         borderColor: 'white',
         borderWidth: 2
     },
-    text: {
+    logotext: {
         color: 'white',
-        fontSize: 30,
+        fontSize: 20,
         paddingLeft: 10,
         fontWeight: 'bold'
     },

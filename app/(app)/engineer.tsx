@@ -1,12 +1,12 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 
-const services = () => {
+const engineer = () => {
   return (
     <View>
-      <Text>services</Text>
+      <Text>engineer</Text>
     </View>
   )
 }
 
-export default services
+export default engineer

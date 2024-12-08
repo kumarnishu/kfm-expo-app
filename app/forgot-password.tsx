@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 import { Button, HelperText, TextInput, ActivityIndicator, Snackbar } from 'react-native-paper';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -50,8 +50,9 @@ function ResetPasswordSendMailForm() {
   }, [isSuccess]);
   return (
     <View style={styles.container}>
+      <Image style={styles.image} source={require('../assets/img/forgot password.jpeg')} />
       <TextInput
-        label="Your Email"
+        label="Enter your registerd email"
         mode="outlined"
         keyboardType="email-address"
         value={formik.values.email}
@@ -98,6 +99,17 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     justifyContent: 'center',
+  },
+
+  image: {
+    width: 150,
+    height: 150,
+    borderRadius: 100,
+    borderColor: 'red',
+    borderWidth: 1,
+    marginRight: 15,
+    marginBottom: 20,
+    marginLeft: 100,
   },
   button: {
     marginTop: 16,
