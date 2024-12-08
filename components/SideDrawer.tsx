@@ -58,7 +58,7 @@ const SideDrawer = ({ visible, handleClose, position }: Props) => {
                     label="Explore"
                     icon="search"
                     active={active === 'explore'}
-                    onPress={() => navigateTo('/main/explore', 'explore')}
+                    onPress={() => navigateTo('/explore', 'explore')}
                 />
                
                 <Drawer.Item

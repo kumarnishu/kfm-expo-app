@@ -31,7 +31,7 @@ const Spares = () => {
   useEffect(() => {
     if (filter) {
       const searcher = new FuzzySearch(spares, ['name', 'partno'], {
-        caseSensitive: true,
+        caseSensitive: false,
       });
       const result = searcher.search(filter);
       setSpares(result)

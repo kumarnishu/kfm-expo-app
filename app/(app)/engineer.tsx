@@ -28,7 +28,7 @@ const Engineers = () => {
     useEffect(() => {
         if (filter) {
             const searcher = new FuzzySearch(engineers, ['username', 'email', 'mobile'], {
-                caseSensitive: true,
+                caseSensitive: false,
             });
             const result = searcher.search(filter);
             setEngineers(result)

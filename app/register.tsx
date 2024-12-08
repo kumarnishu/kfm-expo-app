@@ -4,7 +4,6 @@ import { Button, TextInput, HelperText, Text, Snackbar } from 'react-native-pape
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useMutation } from 'react-query';
-import { queryClient } from './_layout';
 import { Register } from '@/services/UserServices';
 import { router } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';

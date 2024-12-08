@@ -30,7 +30,7 @@ const Machines = () => {
   useEffect(() => {
     if (filter) {
       const searcher = new FuzzySearch(machines, ['name', 'model'], {
-        caseSensitive: true,
+        caseSensitive: false,
       });
       const result = searcher.search(filter);
       setMachines(result)
@@ -50,7 +50,7 @@ const Machines = () => {
 
     <Card style={styles.card}>
       <Card.Content style={styles.cardContent}>
-        <Image style={styles.image} source={{ uri: item.photo }} />
+        <Image style={styles.image} source={item.photo !== "" ? { uri: item.photo } : require("../../assets/img/placeholder.png")} />
         <View style={styles.textContainer}>
           <Title style={styles.title}>{item.name}</Title>
           <Paragraph style={styles.paragraph}>Model No : {item.model}</Paragraph>
@@ -127,9 +127,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   image: {
-    width: 70,
-    height: 70,
-    borderRadius: 50,
+    width: 150,
+    height: 150,
     borderColor: 'red',
     borderWidth: 1,
     marginRight: 15,

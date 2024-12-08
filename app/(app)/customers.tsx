@@ -34,7 +34,7 @@ const Customers = () => {
   useEffect(() => {
     if (filter) {
       const searcher = new FuzzySearch(customers, ['name', 'address'], {
-        caseSensitive: true,
+        caseSensitive: false,
       });
       const result = searcher.search(filter);
       setCustomers(result)

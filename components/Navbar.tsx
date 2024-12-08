@@ -1,68 +1,105 @@
 import { View, Image, StyleSheet } from 'react-native'
-import React, { useContext, useState } from 'react'
+import React, { useCallback, useContext, useState } from 'react'
 import { toTitleCase } from '@/utils/toTitleCase'
-import { Button, IconButton, Text } from 'react-native-paper'
-import { UserContext } from '@/contexts/UserContext';
-import SideDrawer from './SideDrawer';
-import { router } from 'expo-router';
-
+import { Icon, IconButton, Menu, Text } from 'react-native-paper'
+import { UserContext } from '@/contexts/UserContext'
+import { router } from 'expo-router'
+import { Logout } from '@/services/UserServices'
 
 const Navbar = () => {
     const { user } = useContext(UserContext)
-    const [pos, setPos] = useState<'left' | 'right'>('left')
-    const [showDrawer, setShowDrawer] = React.useState(false);
+    const [menuVisible, setMenuVisible] = useState(false)
+    const { setUser } = useContext(UserContext);
+    const openMenu = () => setMenuVisible(true)
+    const closeMenu = () => setMenuVisible(false)
+
+    const handleLogout = useCallback(async () => {
+        try {
+            await Logout();
+            setUser(undefined);
+            router.replace('/login');
+        } catch (err: any) {
+            console.log(err);
+        }
+    }, [setUser]);
 
     return (
-        <>
-            <View style={style.navContainer}>
-                <Button onPress={() => {
-                    setShowDrawer(!showDrawer)
-                    setPos('left')
-                }}>
-                    {user?.dp && user?.dp ? <Image source={{ uri: user?.dp }} style={style.picture} /> : <Text style={style.logotext}>{toTitleCase(user?.username.slice(0, 8) || "")}</Text>}
-                </Button>
+        <View style={style.navContainer}>
+            {/* Profile Picture or Username */}
+            <View>
+                {user?.dp ? (
+                    <Image source={{ uri: user?.dp }} style={style.picture} />
+                ) : (
+                    <Text style={style.logotext}>
+                        {toTitleCase(user?.username.slice(0, 8) || "")}
+                    </Text>
+                )}
+            </View>
 
-                <View style={style.iconView}>
-                    <View>
-                        <IconButton
-                            icon="bell"
-                            size={35}
-                            iconColor='white'
-                            onPress={() => router.push("/notifications")}
-                        />
-                        {1 > 0 && (
-                            <View style={style.badge}>
-                                <Text style={style.badgeText}>{1}</Text>
-                            </View>
-                        )}
-                    </View>
-
+            {/* Icons Section */}
+            <View style={style.iconView}>
+                {/* Notification Icon */}
+                <View>
                     <IconButton
-                        icon="menu"
+                        icon="bell"
                         size={35}
-                        iconColor='white'
-                        onPress={() => {
-                            setShowDrawer(!showDrawer)
-                            setPos('right')
-                        }
-                        }
+                        iconColor="white"
+                        onPress={() => router.push("/notifications")}
+                    />
+                    {1 > 0 && (
+                        <View style={style.badge}>
+                            <Text style={style.badgeText}>{1}</Text>
+                        </View>
+                    )}
+                </View>
+
+                {/* Menu Icon with Dropdown */}
+                <Menu
+                    visible={menuVisible}
+                    onDismiss={closeMenu}
+                    anchorPosition='bottom'
+                    anchor={
+                        <IconButton
+                            icon="menu"
+                            size={35}
+
+                            iconColor="white"
+                            onPress={openMenu}
+                        />
+
+                    }
+                >
+                    <Menu.Item
+                        onPress={() => router.push("/")} title="Home"
+                    />
+                    <Menu.Item
+                        onPress={() => router.push("/explore")} title="Explore"
                     />
 
-                </View>
+                    <Menu.Item
+                        title={<>
+                            <Icon source="logout" size={25} /><Text>Logout</Text>
+                        </>}
+                        onPress={handleLogout}
+                    />
+                </Menu>
             </View>
-            <SideDrawer visible={showDrawer} handleClose={() => setShowDrawer(!showDrawer)} position={pos} />
-
-        </>
+        </View>
     )
 }
 
 const style = StyleSheet.create({
-
     navContainer: {
-        flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', height: 65, borderBottomWidth: 1, backgroundColor: 'red'
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        height: 65,
+        borderBottomWidth: 1,
+        backgroundColor: 'red',
     },
     iconView: {
-        flexDirection: 'row', justifyContent: 'space-between',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
     },
     picture: {
         marginLeft: 10,
@@ -70,13 +107,13 @@ const style = StyleSheet.create({
         height: 40,
         borderRadius: 50,
         borderColor: 'white',
-        borderWidth: 2
+        borderWidth: 2,
     },
     logotext: {
         color: 'white',
         fontSize: 20,
         paddingLeft: 10,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
     },
     badge: {
         position: 'absolute',

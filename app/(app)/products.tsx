@@ -30,7 +30,7 @@ const Products = () => {
   useEffect(() => {
     if (filter) {
       const searcher = new FuzzySearch(products, ['slno', 'machine', 'customer'], {
-        caseSensitive: true,
+        caseSensitive: false,
       });
       const result = searcher.search(filter);
       setProducts(result)
@@ -50,10 +50,17 @@ const Products = () => {
 
     <Card style={styles.card}>
       <Card.Content style={styles.cardContent}>
-        <Image style={styles.image} source={{ uri: item.machine_photo }} />
+        <View>
+          <Image style={styles.image} source={item.machine_photo !== "" ? { uri: item.machine_photo } : require("../../assets/img/placeholder.png")} />
+          <Paragraph style={{
+            fontSize: 18,
+            fontWeight: 'bold',
+            padding:5,
+            textTransform: 'capitalize'
+          }}>{item.machine}</Paragraph>
+        </View>
         <View style={styles.textContainer}>
           <Title style={styles.title}>SerialNo : {item.sl_no}</Title>
-          <Paragraph style={styles.paragraph}>Machine : {item.machine}</Paragraph>
           <Paragraph style={styles.paragraph}>Customer : {item.customer}</Paragraph>
           <Paragraph style={styles.paragraph}>{item.installationDate ? `Installation Date : ${item.installationDate}` : 'Not Installed'}</Paragraph>
           <Paragraph style={styles.paragraph}>{item.warrantyUpto ? `Warranty upto : ${item.warrantyUpto}` : 'Not Applicable'}</Paragraph>
@@ -87,7 +94,7 @@ const Products = () => {
     <View style={styles.container}>
       {/* Title */}
 
-      <Text style={styles.title}>Products</Text>
+      <Text style={styles.title}>Registered Products</Text>
       <TextInput style={{ marginBottom: 10 }} placeholder='Products' mode='outlined' onChangeText={(val) => setFilter(val)} />
 
 
@@ -130,9 +137,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   image: {
-    width: 80,
-    height: 80,
-    borderRadius: 50,
+    width: 150,
+    height: 150,
     borderColor: 'red',
     borderWidth: 1,
     marginRight: 15,
@@ -145,6 +151,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 16,
+    textTransform: 'capitalize'
   },
   card: {
     marginBottom: 16,

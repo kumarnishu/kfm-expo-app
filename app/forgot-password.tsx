@@ -52,6 +52,7 @@ function ResetPasswordSendMailForm() {
     <View style={styles.container}>
       <Image style={styles.image} source={require('../assets/img/forgot password.jpeg')} />
       <TextInput
+        style={{ marginHorizontal: 20 }}
         label="Enter your registerd email"
         mode="outlined"
         keyboardType="email-address"
