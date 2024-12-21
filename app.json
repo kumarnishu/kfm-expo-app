@@ -5,14 +5,9 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "scheme": "kfm-app",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
-    "splash": {
-      "image": "./assets/images/splash-icon.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
     "ios": {
       "supportsTablet": true
     },
@@ -21,8 +16,15 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.kfmindia.kfmapp",
-      "googleServicesFile": "./firebase.json"
+       "package": "com.kfmindia.kfmapp",
+      "googleServicesFile": "./firebase.json",
+      "permissions": [
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.FOREGROUND_SERVICE",
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -32,11 +34,15 @@
     "plugins": [
       "expo-router",
       [
-        "expo-font",
+        "expo-location",
         {
-          "fonts": [
-            "./assets/fonts/SpaceMono-Regular.ttf"
-          ]
+          "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera."
         }
       ],
       [
@@ -46,6 +52,23 @@
             "usesCleartextTraffic": true
           }
         }
+      ],
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/splash.png",
+          "resizeMode": "cover",
+          "dark": {
+            "image": "./assets/images/splash-dark.png",
+            "resizeMode": "cover"
+          }
+        }
+      ],
+      [
+        "expo-font",
+        {
+          "fonts": ["./assets/fonts/Roboto-Regular.ttf","./assets/fonts/SpaceMono-Regular.ttf"]
+        }
       ]
     ],
     "experiments": {
@@ -54,10 +77,8 @@
     "extra": {
       "router": {
         "origin": false
-      },
-      "eas": {
-        "projectId": "c9becfb1-f0fa-48cd-90f8-59a768b8382b"
       }
-    }
+    },
+    "owner": "kfmindia"
   }
 }

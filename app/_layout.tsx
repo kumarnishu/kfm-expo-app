@@ -1,12 +1,10 @@
 import { useFonts } from 'expo-font';
 import { useColorScheme } from 'react-native';
 import {
-  MD3DarkTheme,
-  MD3LightTheme,
   PaperProvider,
 } from 'react-native-paper';
 import * as SplashScreen from 'expo-splash-screen';
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Slot } from 'expo-router';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { QueryClient, QueryClientProvider } from 'react-query';
@@ -45,8 +43,11 @@ export const queryClient = new QueryClient({
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [loaded, error] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf')
-  });
+    Roboto: require('../assets/fonts/Roboto-Regular.ttf'),
+    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+});
+
+
   const [expoPushToken, setExpoPushToken] = useState('');
   const [channels, setChannels] = useState<Notifications.NotificationChannel[]>([]);
   const [notification, setNotification] = useState<Notifications.Notification | undefined>(
@@ -54,32 +55,7 @@ export default function RootLayout() {
   );
   const notificationListener = useRef<Notifications.EventSubscription>();
   const responseListener = useRef<Notifications.EventSubscription>();
-  const paperTheme = colorScheme === 'light'
-    ? {
-      ...MD3LightTheme,
-      colors: {
-        ...MD3LightTheme.colors,
-        primary: '#FF0000', // Bright red
-        onPrimary: '#FFFFFF', // White text on red
-        background: '#FFFFFF', // White background
-        surface: '#FFFFFF', // Card background
-        onSurface: '#FF0000', // Red text on white
-        accent: '#FF6666', // Softer red for accents
-      },
-    }
-    : {
-      ...MD3DarkTheme,
-      colors: {
-        ...MD3DarkTheme.colors,
-        primary: '#FF6666', // Softer red for dark theme
-        onPrimary: '#FFFFFF', // White text on red
-        background: '#1A1A1A', // Dark background
-        surface: '#333333', // Surface background for dark mode
-        onSurface: '#FFFFFF', // White text on dark
-        accent: '#FF0000', // Bright red for accents
-      },
-    };
-
+ 
 
   useEffect(() => {
     if (loaded || error) {
@@ -178,19 +154,19 @@ export default function RootLayout() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <UserProvider>
+    <UserProvider>
         <SafeAreaProvider>
-          <PaperProvider theme={paperTheme}>
-            <AlertProvider>
-              <>
-                <StatusBar style='auto' />
-                <Slot />
-              </>
-            </AlertProvider>
-          </PaperProvider>
+            <PaperProvider>
+                <AlertProvider>
+                    <React.Fragment>
+                        <StatusBar style='auto' />
+                        <Slot />
+                    </React.Fragment>
+                </AlertProvider>
+            </PaperProvider>
         </SafeAreaProvider>
-      </UserProvider>
-    </QueryClientProvider>
+    </UserProvider>
+</QueryClientProvider>
   )
 }
 

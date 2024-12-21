@@ -137,7 +137,6 @@ const LoginScreen = () => {
           >
             <Text style={styles.linkText}>
               <Link style={styles.link} href="/register">Register</Link> or{' '}
-              <Link style={styles.link} href="/forgot-password">Forgot Password?</Link>
             </Text>
           </Button>
         </View>

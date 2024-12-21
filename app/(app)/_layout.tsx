@@ -9,9 +9,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialIcons } from '@expo/vector-icons';
 
 
-
-
-
 export default function TabLayout() {
   const { alert, setAlert } = useContext(AlertContext);
   const { user, isLoading } = useContext(UserContext)

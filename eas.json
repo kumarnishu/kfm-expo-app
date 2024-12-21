@@ -1,18 +1,30 @@
 {
     "cli": {
-        "version": ">= 5.9.3"
+      "version": ">= 14.0.2",
+      "appVersionSource": "remote"
     },
     "build": {
-        "production": {
-            "android": {
-                "buildType": "apk"
-            },
-            "ios": {
-                "simulator": true
-            },
-            "env": {
-                "EXPO_PUBLIC_SERVER_URL": "http://kfmindia.app"
-            }
+      "development": {
+        "developmentClient": true,
+        "distribution": "internal"
+      },
+     "preview": {
+        "android": {
+          "buildType": "apk"
+        },
+        "env": {
+          "EXPO_PUBLIC_SERVER_URL": "http://kfmindia.app"
         }
+      },
+      "production": {
+        "autoIncrement": true,
+        "env": {
+          "EXPO_PUBLIC_SERVER_URL": "http://kfmindia.app"
+        }
+      }
+    },
+    "submit": {
+      "production": {}
     }
-}
+  }
+  
