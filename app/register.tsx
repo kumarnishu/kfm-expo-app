@@ -1,22 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, ScrollView, Image } from 'react-native';
-import { Button, TextInput, HelperText, Text, Snackbar } from 'react-native-paper';
+import { Button, TextInput, HelperText, Text, Snackbar, Divider } from 'react-native-paper';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useMutation } from 'react-query';
 import { Register } from '@/services/UserServices';
 import { router } from 'expo-router';
-import * as ImagePicker from 'expo-image-picker';
 import { AxiosResponse } from 'axios';
 import { BackendError } from '..';
+import { RegisterAsCustomerDto } from '@/dtos/user.dto';
+import { ScrollView, View } from 'react-native';
 
 function register() {
-  const [selectedImage, setSelectedImage] = useState<ImagePicker.ImagePickerAsset | null>(null);
   const [message, setMessage] = useState<string | undefined>()
-  const { mutate, isSuccess, isLoading, error } = useMutation<
+  const { mutate, isSuccess, isLoading } = useMutation<
     AxiosResponse<{ message: string }>,
     BackendError,
-    FormData
+    RegisterAsCustomerDto
   >(Register, {
     onError: ((error) => {
       error && setMessage(error.response.data.message || "")
@@ -26,32 +25,30 @@ function register() {
 
   const formik = useFormik({
     initialValues: {
-      username: "",
+      name: "",
       email: "",
-      password: "",
+      gst: "",
       mobile: "",
-      dp: null,
+      pincode: 0,
+      address: "",
+
     },
     validationSchema: Yup.object({
-      username: Yup.string().required('Required').min(4).max(30),
+      name: Yup.string().required('Required').min(4).max(100),
       email: Yup.string().required('Required').email('Invalid email'),
-      password: Yup.string().required('Required').min(4).max(30),
-      mobile: Yup.string().required('Required').length(10),
+      gst: Yup.string().required('Required 15 digit gst number').min(15).max(15),
+      address: Yup.string().required('Required Address').min(4).max(300),
+      pincode: Yup.number().required('Required 6 digit pincode').min(100000).max(999999),
+      mobile: Yup.string().required('mobile is required').min(10, 'mobile must be 10 digits').max(10, 'mobile must be 10 digits').matches(/^[0-9]+$/, 'mobile must be a number'),
     }),
     onSubmit: (values) => {
-      const formData = new FormData();
-      Object.entries(values).forEach(([key, value]) => {
-        if (value) {
-          formData.append(key, value);
-        }
-      });
-      mutate(formData);
+      mutate(values);
     },
   });
 
   useEffect(() => {
     if (isSuccess) {
-      setMessage(`${formik.values.username} ThankYou for joining With us !!`)
+      setMessage(`${formik.values.name} ThankYou for joining With us !!`)
       setTimeout(() => {
         {
           formik.resetForm()
@@ -62,32 +59,7 @@ function register() {
 
   }, [isSuccess]);
 
-  const handleImagePicker = async () => {
-    const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (!permission.granted) {
-      setMessage('Permission required Please grant media access to pick an image.')
-      return;
-    }
 
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-    if (!result.canceled) {
-      setSelectedImage(result.assets[0]);
-      formik.setFieldValue('dp', {
-        uri: result.assets[0].uri,
-        type: result.assets[0].mimeType || 'image/*',
-        name: result.assets[0].fileName + String(Number(new Date())),
-      });
-      setMessage('file selected')
-    }
-    else {
-      setSelectedImage(null);
-    }
-  };
   return (
     <>
       {message && <Snackbar
@@ -104,38 +76,34 @@ function register() {
         {message}
       </Snackbar>}
       <ScrollView>
-        <View style={styles.form}>
-
-          {selectedImage && <View style={styles.imageView}>
-            <Image source={{ uri: selectedImage.uri }} style={styles.selectedImage} />
-          </View>}
+        <View style={{ flex: 1, justifyContent: 'center', padding: 10, gap: 2 }}>
           <Text style={{ fontSize: 30, textAlign: 'center', padding: 20, fontWeight: 'bold' }}>Create Account</Text>
           <TextInput
-            label="Username"
+            label="Enter you name"
             mode="outlined"
-            value={formik.values.username}
-            onChangeText={formik.handleChange('username')}
-            onBlur={formik.handleBlur('username')}
-            error={formik.touched.username && Boolean(formik.errors.username)}
+            value={formik.values.name}
+            onChangeText={formik.handleChange('name')}
+            onBlur={formik.handleBlur('name')}
+            error={formik.touched.name && Boolean(formik.errors.name)}
           />
-          <HelperText type="error" visible={formik.touched.username && Boolean(formik.errors.username)}>
-            {formik.errors.username}
-          </HelperText>
+          {formik.touched.name && Boolean(formik.errors.name) && <HelperText type="error" >
+            {formik.errors.name}
+          </HelperText>}
 
           <TextInput
-            label="Email"
+            label="Enter your email"
             mode="outlined"
             value={formik.values.email}
             onChangeText={formik.handleChange('email')}
             onBlur={formik.handleBlur('email')}
             error={formik.touched.email && Boolean(formik.errors.email)}
           />
-          <HelperText type="error" visible={formik.touched.email && Boolean(formik.errors.email)}>
+          {formik.touched.email && Boolean(formik.errors.email) && <HelperText type="error" >
             {formik.errors.email}
-          </HelperText>
+          </HelperText>}
 
           <TextInput
-            label="Mobile"
+            label="Enter your mobile"
             mode="outlined"
             keyboardType="number-pad"
             value={formik.values.mobile}
@@ -143,39 +111,53 @@ function register() {
             onBlur={formik.handleBlur('mobile')}
             error={formik.touched.mobile && Boolean(formik.errors.mobile)}
           />
-          <HelperText type="error" visible={formik.touched.mobile && Boolean(formik.errors.mobile)}>
+          {formik.touched.mobile && Boolean(formik.errors.mobile) && <HelperText type="error" >
             {formik.errors.mobile}
-          </HelperText>
+          </HelperText>}
 
           <TextInput
-            label="Password"
+            label="Enter your gst number"
             mode="outlined"
-            secureTextEntry
-            value={formik.values.password}
-            onChangeText={formik.handleChange('password')}
-            onBlur={formik.handleBlur('password')}
-            error={formik.touched.password && Boolean(formik.errors.password)}
+            keyboardType="number-pad"
+            value={formik.values.gst}
+            onChangeText={formik.handleChange('gst')}
+            onBlur={formik.handleBlur('gst')}
+            error={formik.touched.gst && Boolean(formik.errors.gst)}
           />
-          <HelperText type="error" visible={formik.touched.password && Boolean(formik.errors.password)}>
-            {formik.errors.password}
-          </HelperText>
-
-          <Button
-            icon="file"
+          {formik.touched.gst && Boolean(formik.errors.gst) && < HelperText type="error">
+            {formik.errors.gst}
+          </HelperText>}
+          <TextInput
+            label="Enter your pincode "
             mode="outlined"
-            onPress={handleImagePicker}
-            style={styles.imagePickerButton}
-          >
-            Choose Display Picture
-          </Button>
-
-
-          <HelperText type="error" visible={formik.touched.dp && Boolean(formik.errors.dp)}>
-            {formik.errors.dp}
-          </HelperText>
-
+            keyboardType="number-pad"
+            value={String(formik.values.pincode)}
+            onChangeText={formik.handleChange('pincode')}
+            onBlur={formik.handleBlur('pincode')}
+            error={formik.touched.pincode && Boolean(formik.errors.pincode)}
+          />
+          {formik.touched.pincode && Boolean(formik.errors.pincode) && < HelperText type="error">
+            {formik.errors.pincode}
+          </HelperText>}
+          <TextInput
+            label="Enter your address"
+            mode="outlined"
+            multiline
+            style={{ height: 100 }}
+            numberOfLines={4}
+            value={formik.values.address}
+            onChangeText={formik.handleChange('address')}
+            onBlur={formik.handleBlur('address')}
+            error={formik.touched.address && Boolean(formik.errors.address)}
+          />
+          {formik.touched.address && Boolean(formik.errors.address) && < HelperText type="error">
+            {formik.errors.address}
+          </HelperText>}
+          <Divider style={{ marginVertical: 10 }} />
           <Button
             mode="contained"
+            buttonColor='red'
+            style={{ padding: 5, borderRadius: 10 }}
             onPress={() => formik.handleSubmit()}
             loading={isLoading}
             disabled={isLoading}
@@ -184,33 +166,11 @@ function register() {
           </Button>
 
         </View>
-      </ScrollView>
+      </ScrollView >
     </>
   );
 }
 
-const styles = StyleSheet.create({
 
-  form: {
-    gap: 1,
-    paddingHorizontal: 10,
-    marginTop: 30
-  },
-  imageView: {
-    flex: 1, flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  selectedImage: {
-    width: 60,
-    height: 60,
-    borderRadius: 75,
-    marginBottom: 16,
-  },
-  imagePickerButton: {
-    marginBottom: 16,
-    width: '100%',
-  }
-});
 
 export default register;

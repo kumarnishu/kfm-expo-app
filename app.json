@@ -16,14 +16,16 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-       "package": "com.kfmindia.kfmapp",
+      "package": "com.kfmindia.kfmapp",
       "googleServicesFile": "./firebase.json",
       "permissions": [
         "android.permission.ACCESS_COARSE_LOCATION",
         "android.permission.ACCESS_FINE_LOCATION",
         "android.permission.FOREGROUND_SERVICE",
         "android.permission.CAMERA",
-        "android.permission.RECORD_AUDIO"
+        "android.permission.RECORD_AUDIO",
+        "android.permission.READ_SMS",
+        "android.permission.RECEIVE_SMS"
       ]
     },
     "web": {
@@ -67,7 +69,10 @@
       [
         "expo-font",
         {
-          "fonts": ["./assets/fonts/Roboto-Regular.ttf","./assets/fonts/SpaceMono-Regular.ttf"]
+          "fonts": [
+            "./assets/fonts/Roboto-Regular.ttf",
+            "./assets/fonts/SpaceMono-Regular.ttf"
+          ]
         }
       ]
     ],

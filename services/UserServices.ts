@@ -1,23 +1,37 @@
+import { RegisterAsCustomerDto } from "@/dtos/user.dto";
 import { apiClient } from "./utils/AxiosInterceptor";
 
-export const Login = async (
+export const SendOtp = async (
   body: {
-    username: string,
-    password: string,
-    multi_login_token?: string
+    mobile: string
+  }
+) => {
+  return await apiClient.post("sendotp", body);
+};
+
+export const CheckOtpAndLogin = async (
+  body: {
+    mobile: string, otp: number
   }
 ) => {
   return await apiClient.post("login", body);
 };
 
-export const Register = async (body: FormData) => {
-  console.log("nishu", body)
-  return await apiClient.post("mobile/register", body, {
-    headers: {
-      'Content-Type': 'multipart/form-data'
-    }
-  })
+
+export const Register = async (body: RegisterAsCustomerDto) => {
+  return await apiClient.post("register", body)
 };
+
+
+
+
+
+
+
+
+
+
+
 
 export const GetAllEngineers = async () => {
   return await apiClient.get(`engineers`)

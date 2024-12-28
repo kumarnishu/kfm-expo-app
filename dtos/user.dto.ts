@@ -1,38 +1,47 @@
-export type GetUserForEditDto = {
-    _id?: string,
-    username: string,
-    email: string,
-    password: string,
-    customer: string,
+export type RegisterAsCustomerDto = {
+    name: string,
     mobile: string,
+    email: string,
+    gst: string,
+    pincode: number,
+    address: string,
 }
 
-
-export type CreateUserFromExcelDto = {
-    username: string,
-    email: string,
-    password: string,
-    customer: string,
+export type CreateStaffDto = {
+    customer:string,
+    username:string,
     mobile: string,
-    status?: string
+    email?: string
+}
+
+export type GetCustomerDto = {
+    _id: string,
+    name: string,
+    address: string,
+    gst: string,
+    pincode: number,
+    email: string,
+    mobile: string,
+    users: number,
+    is_active: boolean,
+    created_at: string,
+    updated_at: string,
+    created_by: string,
+    updated_by: string
 }
 
 
 export type GetUserDto = {
     _id: string,
-    username: string,
-    email: string,
+    username:string,
     mobile: string,
-    customer: string,
+    email: string,
     dp: string,
-    orginal_password: string,
-    is_admin: boolean,
-    email_verified: boolean,
+    is_active:boolean,
+    customer: string,
+    role: string,//admin,engineer,owner,staff
     mobile_verified: boolean,
-    is_active: boolean,
-    last_login: string,
-    is_multi_login: boolean,
-    is_engineer: boolean,
+    email_verified: boolean,
     created_at: string,
     updated_at: string,
     created_by: string,
@@ -42,25 +51,10 @@ export type GetUserDto = {
 
 
 export type LoginDto = {
-    username: string,
-    password: string,
-    multi_login_token: string
+    mobile: string,
 }
 
-
-export type UpdateProfileDto = {
-    email: string,
-    mobile: string
-}
-export type UpdatePasswordDto = {
-    oldPassword: string,
-    newPassword: string,
-    confirmPassword: string
-}
-export type ResetPasswordDto = {
-    newPassword: string,
-    confirmPassword: string
-}
 export type SendOrVerifyEmailDto = {
     email: string
 }
+

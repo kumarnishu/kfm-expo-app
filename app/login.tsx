@@ -1,10 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { UserContext } from '../contexts/UserContext';
-import { Login } from '../services/UserServices';
+import React, { useEffect, useState } from 'react';
+import { SendOtp } from '../services/UserServices';
 import {
   Image,
-  ScrollView,
-  StyleSheet,
   View,
 } from 'react-native';
 import { useMutation } from 'react-query';
@@ -18,13 +15,12 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
 const LoginScreen = () => {
-  const { setUser } = useContext(UserContext);
   const [message, setMessage] = useState<string | undefined>()
-  const { mutate, data, isSuccess, isLoading, error } = useMutation<
+  const { mutate, isSuccess, isLoading, error } = useMutation<
     AxiosResponse<{ user: GetUserDto; token: string }>,
     BackendError,
-    { username: string; password: string; multi_login_token?: string }
-  >(Login, {
+    { mobile: string }
+  >(SendOtp, {
     onError: ((error) => {
       error && setMessage(error.response.data.message || "")
     })
@@ -32,12 +28,10 @@ const LoginScreen = () => {
 
   const formik = useFormik({
     initialValues: {
-      username: '',
-      password: '',
+      mobile: '',
     },
     validationSchema: Yup.object({
-      username: Yup.string().required('Username is required'),
-      password: Yup.string().required('Password is required'),
+      mobile: Yup.string().required('mobile is required').min(10, 'mobile must be 10 digits').max(10, 'mobile must be 10 digits').matches(/^[0-9]+$/, 'mobile must be a number'),
     }),
     onSubmit: async (values) => {
       mutate(values);
@@ -46,21 +40,19 @@ const LoginScreen = () => {
 
   useEffect(() => {
     const retrieveCredentials = async () => {
-      const savedUsername = await AsyncStorage.getItem('uname');
-      const savedPassword = await AsyncStorage.getItem('passwd');
-      if (savedUsername && savedPassword) {
-        formik.setValues({ username: savedUsername, password: savedPassword });
+      const savedmobile = await AsyncStorage.getItem('uname');
+      if (savedmobile) {
+        formik.setValues({ mobile: savedmobile });
       }
     };
     retrieveCredentials();
   }, []);
 
   useEffect(() => {
-    if (isSuccess && data) {
-      setUser(data.data.user);
-      router.replace('/');
-      AsyncStorage.setItem('uname', formik.values.username);
-      AsyncStorage.setItem('passwd', formik.values.password);
+    if (isSuccess) {
+      //@ts-ignore
+      router.replace(`/otpverify/?mobile=${formik.values.mobile}`);
+      AsyncStorage.setItem('uname', formik.values.mobile);
       setMessage(undefined)
     }
     if (error) {
@@ -83,131 +75,43 @@ const LoginScreen = () => {
       >
         {message}
       </Snackbar>}
-      <ScrollView contentContainerStyle={styles.container}>
-        <View style={styles.form}>
-          <Image style={styles.logo} source={require('../assets/images/favicon.png')} />
-          <Divider style={styles.divider} />
-          <Text style={styles.header}>Welcome Back!</Text>
+      <View style={{ flex: 1, padding: 20, flexDirection: 'column', gap: 10, justifyContent: 'center' }}>
+        <Image style={{ width: 300, height: 70, marginLeft: 30 }} source={require('../assets/img/icon.png')} />
+        <TextInput
+          label="Enter your mobile"
+          placeholder="Enter your mobile"
+          autoFocus
+          value={formik.values.mobile}
+          onChangeText={formik.handleChange('mobile')}
+          onBlur={formik.handleBlur('mobile')}
+          keyboardType='numeric'
+          mode="outlined"
+          style={{ backgroundColor: 'white', paddingTop: 10, borderRadius: 10 }}
+          error={formik.touched.mobile && !!formik.errors.mobile}
+        />
+        {formik.touched.mobile && formik.errors.mobile && <Text style={{ color: 'red' }}>{formik.errors.mobile}</Text>} <Divider />
+        <Button
+          mode="contained"
+          onPress={() => formik.handleSubmit()}
+          loading={isLoading}
+          buttonColor='red'
+          style={{ padding: 5, borderRadius: 10 }}
+        >
+          {' Send OTP '}
+        </Button>
 
-          <TextInput
-            label="Username"
-            placeholder="Enter your username"
-            value={formik.values.username}
-            onChangeText={formik.handleChange('username')}
-            onBlur={formik.handleBlur('username')}
-            autoCapitalize="none"
-            style={styles.input}
-            mode="outlined"
-            error={formik.touched.username && !!formik.errors.username}
-          />
-          {formik.touched.username && formik.errors.username && (
-            <Text style={styles.errorText}>{formik.errors.username}</Text>
-          )}
-
-          <TextInput
-            label="Password"
-            placeholder="Enter your password"
-            value={formik.values.password}
-            onChangeText={formik.handleChange('password')}
-            onBlur={formik.handleBlur('password')}
-            secureTextEntry
-            autoCapitalize="none"
-            style={styles.input}
-            mode="outlined"
-            error={formik.touched.password && !!formik.errors.password}
-          />
-          {formik.touched.password && formik.errors.password && (
-            <Text style={styles.errorText}>{formik.errors.password}</Text>
-          )}
-
-          <Button
-            mode="contained"
-            onPress={() => formik.handleSubmit()}
-            loading={isLoading}
-            style={styles.button}
-            labelStyle={styles.buttonText}
-          >
-            Login
-          </Button>
-
-          <Button
-            mode="text"
-            style={styles.linkButton}
-            disabled={isLoading}
-          >
-            <Text style={styles.linkText}>
-              <Link style={styles.link} href="/register">Register</Link> or{' '}
-            </Text>
-          </Button>
-        </View>
-      </ScrollView>
+        <Button
+          mode="text"
+          disabled={isLoading}
+        >
+          <Text >
+            <Link style={{ textAlign: 'center', fontSize: 14, marginTop: 30 }} href="/register">I donot have an Account ? Register </Link>
+          </Text>
+        </Button>
+      </View >
     </>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flexGrow: 1,
-    padding: 16,
-  },
-  form: {
-    alignItems: 'center',
-    marginTop: 100,
-    paddingHorizontal: 16,
-  },
-  logo: {
-    width: 200,
-    height: 80,
-    marginBottom: 20,
-  },
-  divider: {
-    width: '100%',
-    marginVertical: 16,
-  },
-  header: {
-    fontSize: 24,
-    paddingVertical: 10,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 20,
-  },
-  input: {
-    width: '100%',
-    marginBottom: 16,
-  },
-  button: {
-    marginTop: 10,
-    padding: 5,
-    borderRadius: 5,
-    width: '100%',
-  },
-  buttonText: {
-    fontSize: 16,
-    fontFamily: 'SpaceMono-Regular',
-    fontWeight: 'bold',
-  },
-  linkButton: {
-    marginTop: 10,
-    alignSelf: 'center',
-  },
-  linkText: {
-    fontFamily: 'SpaceMono-Regular',
-    textDecorationStyle: undefined,
-    color: 'red',
-  },
-  link: {
-    color: 'black',
-    fontFamily: 'SpaceMono-Regular',
-    fontSize: 12,
-    letterSpacing: 1.5,
-    textDecorationLine: undefined
-  },
-  errorText: {
-    color: 'red',
-    fontFamily: 'SpaceMono-Regular',
-    fontSize: 12,
-    marginBottom: 8,
-  },
-});
 
 export default LoginScreen;
